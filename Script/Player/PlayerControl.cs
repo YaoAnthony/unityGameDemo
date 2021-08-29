@@ -59,17 +59,15 @@ public class PlayerControl : MonoBehaviour
     {
         Run();
         Jump();
-        //ChangeWeapon();
+        ChangeWeapon();
         EnvironmentCheck();
-        Animation();
+        Animations();
     }
 
     void Run(){
         if(!isAttack){
             float x = Input.GetAxis("Horizontal");
-           
             entity.velocity = new Vector2(x * runningSpeed, entity.velocity.y);
-            Debug.Log(entity.velocity);
         }
     }
 
@@ -98,26 +96,27 @@ public class PlayerControl : MonoBehaviour
 
     void EnvironmentCheck(){
         //检测对象是否在地面上
+        Debug.Log( myFeet.IsTouchingLayers(LayerMask.GetMask("Ground")));
         isGround = myFeet.IsTouchingLayers(LayerMask.GetMask("Ground"));
     }
     
-    void Animation(){
+    void Animations(){
         if(isGround){
             //设置人物动画组
-            // switch(currentState){
-            //     case 0:
-            //         anime.runtimeAnimatorController = defaultPlayer as RuntimeAnimatorController;
-            //     break;
-            //     case 1:
-            //         anime.runtimeAnimatorController = swordPlayer as RuntimeAnimatorController;
-            //     break;
-            //     case 2:
-            //         anime.runtimeAnimatorController = archerPlayer as RuntimeAnimatorController;
-            //     break;
-            //     default:
-            //         anime.runtimeAnimatorController = defaultPlayer as RuntimeAnimatorController;
-            //     break;
-            // }
+            switch(currentState){
+                case 0:
+                    anime.runtimeAnimatorController = defaultPlayer as RuntimeAnimatorController;
+                break;
+                case 1:
+                    anime.runtimeAnimatorController = swordPlayer as RuntimeAnimatorController;
+                break;
+                case 2:
+                    anime.runtimeAnimatorController = archerPlayer as RuntimeAnimatorController;
+                break;
+                default:
+                    anime.runtimeAnimatorController = defaultPlayer as RuntimeAnimatorController;
+                break;
+            }
         }
         //Epsilon意思是无限小
         bool playerHasXSpeed = Mathf.Abs(entity.velocity.x) > Mathf.Epsilon;
@@ -135,28 +134,28 @@ public class PlayerControl : MonoBehaviour
 
         if(isGround){
             //在地面上默认不是掉落
-            anime.SetBool("isFalling", false);
+            anime.SetBool("Fall", false);
 
             //是否在跑步
-            anime.SetBool("isRunning",isRunning);
+            anime.SetBool("Run",isRunning);
 
 
             //如果没有任何行动，播放待命动画
-            anime.SetBool("Idle", anime.GetBool("isRunning") || anime.GetBool("isFalling") || anime.GetBool("isJumping") ? false : true );
+            anime.SetBool("Idle", anime.GetBool("Run") || anime.GetBool("Fall") || anime.GetBool("Jump") ? false : true );
         
         }else{
             //在地面上默认不是待命动画
             anime.SetBool("Idle", false);
-             //跳跃检测
+            //跳跃检测
             if(!isDoubleJumping){
-                anime.SetBool("isJumping",  entity.velocity.y > 0.0f ? true : false ); 
+                anime.SetBool("Jump",  entity.velocity.y > 0.0f ? true : false ); 
                 
             }else{
                 anime.SetTrigger("isDoubleJump");
                 isDoubleJumping = false;
             }
 
-            anime.SetBool("isFalling",  entity.velocity.y < 0.0f ? true : false ); 
+            anime.SetBool("Fall",  entity.velocity.y < 0.0f ? true : false ); 
         }
     }
 
@@ -179,17 +178,17 @@ public class PlayerControl : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other) {
 
-        // if(other.gameObject.CompareTag("weaponTriggerBox") && (other.gameObject.name == "bow") )
-        // {
-        //     GetComponent<PlayerControl>().haveRow = true;
-        //     currentState = 2;
-        // }
+        if(other.gameObject.CompareTag("weaponTriggerBox") && (other.gameObject.name == "bow") )
+        {
+            GetComponent<PlayerControl>().haveRow = true;
+            currentState = 2;
+        }
 
-        // if(other.gameObject.CompareTag("weaponTriggerBox") && (other.gameObject.name == "sword") )
-        // {
-        //     GetComponent<PlayerControl>().haveSword = true;
-        //     currentState = 1;
-        // }
+        if(other.gameObject.CompareTag("weaponTriggerBox") && (other.gameObject.name == "sword") )
+        {
+            GetComponent<PlayerControl>().haveSword = true;
+            currentState = 1;
+        }
    }
     
 

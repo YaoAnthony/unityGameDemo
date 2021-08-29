@@ -6,11 +6,12 @@ public class shooting : StateMachineBehaviour
 {
 
 
+    private int animeShooting;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
-    //override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    
-    //}
+    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+       animeShooting = 0;
+    }
 
     private float clipTime;
     public GameObject arrow;
@@ -31,16 +32,20 @@ public class shooting : StateMachineBehaviour
         //计算当前播放的动画片段运行至哪一帧
         int currentFrame = (int)(Mathf.Floor(totalFrame * clipTime) % totalFrame);
 
-        // if(currentFrame == 13){
-        //     animator.SetBool("Shooting", true);
-        // }
+        if(currentFrame == 14){
+            animeShooting++;
+        }
+        if(animeShooting == 1){
+            Instantiate(arrow,GameObject.Find("Player").transform.position,GameObject.Find("Player").transform.rotation);
+            GameObject.Find("Player").GetComponent<PlayerAttack>().isAttack = false;  
+        }
+        
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        Instantiate(arrow,GameObject.Find("Player").transform.position,GameObject.Find("Player").transform.rotation);
-        GameObject.Find("Player").GetComponent<PlayerAttack>().isAttack = false;  
+
     }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()

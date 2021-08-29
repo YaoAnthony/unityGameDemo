@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Row : MonoBehaviour
 {
+    public float disappearTime;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,7 +19,11 @@ public class Row : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.gameObject.CompareTag("Player")){
-            Destroy(this.gameObject);
+            Invoke("Destorys",disappearTime);
         }    
+    }
+
+    void Destorys(){
+        Destroy(this.gameObject);
     }
 }

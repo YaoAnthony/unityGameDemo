@@ -17,10 +17,15 @@ public class Sword : MonoBehaviour
         //Invoke("Jump", 1);
     }
 
+
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.gameObject.CompareTag("Player")){
-            Destroy(this.gameObject);
+            Invoke("Destorys",0.1f);
         }    
+    }
+
+    void Destorys(){
+        Destroy(this.gameObject);
     }
 
     void Jump(){
