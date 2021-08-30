@@ -2,6 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/********************************************************************************
+
+**class name: Player control
+
+**description: 用于控制player的攻击，动画切换
+
+**autor: Anthony, Andy
+
+**Create Time: Aug 29 2021
+
+**修改日志:
+    1.  Anthony Aug 29 2021
+    2.  Anthony Aug 30 2021
+
+*********************************************************************************/
 public class PlayerAttack : MonoBehaviour
 {
     public int existArrow = 3;
