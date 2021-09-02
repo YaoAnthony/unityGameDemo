@@ -2,19 +2,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/********************************************************************************
+
+**class name: Player control
+
+**description: 通过监控动画帧数发射箭矢
+
+**autor: Anthony, Andy
+
+**Create Time: Aug 30 2021
+
+**修改日志:
+    1.  Anthony Aug 30 2021
+
+*********************************************************************************/
 public class shooting : StateMachineBehaviour
 {
-
-
     private int animeShooting;
+    private float clipTime;
+    public GameObject arrow;
+
+
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
        animeShooting = 0;
     }
 
-    private float clipTime;
-    public GameObject arrow;
+
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -43,11 +59,9 @@ public class shooting : StateMachineBehaviour
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-
-    }
-
+    // override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    // {
+    // }
     // OnStateMove is called right after Animator.OnAnimatorMove()
     //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     //{

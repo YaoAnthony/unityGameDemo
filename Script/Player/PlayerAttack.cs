@@ -15,17 +15,22 @@ using UnityEngine;
 **修改日志:
     1.  Anthony Aug 29 2021
     2.  Anthony Aug 30 2021
+    3.  Anthony Aug 31 2021
+    4.  Anthony Sep 01 2021
 
 *********************************************************************************/
 public class PlayerAttack : MonoBehaviour
 {
-    public int existArrow = 3;
+    private Animator anime;         //动画
 
-    public GameObject projection;
-    private Animator anime;
+    public int swordDamage;       //剑的伤害
 
-    public bool isAttack = false;   
-    // Start is called before the first frame update
+    public int existArrow = 3;      //玩家拥有的弓箭数量
+    public GameObject projection;   //投抛物
+    public bool isAttack = false;   //用来输送是否可以发射子弹的bool值，调用的地方在Shooting界面
+
+    
+    
     void Start()
     {
         anime = this.GetComponent<Animator>();
@@ -35,29 +40,30 @@ public class PlayerAttack : MonoBehaviour
     void Update()
     {
         Attack();
-
     }
 
     void Attack(){
-        if(anime.runtimeAnimatorController.name == "Archer_Player"){
 
+        //检测是否是弓箭手状态
+        if(anime.runtimeAnimatorController.name == "Archer_Player"){
             if(Input.GetButtonDown("Attack") && !anime.GetCurrentAnimatorStateInfo(0).IsName("Attack")){
                 anime.SetTrigger("Attack");
                 isAttack = true;
                 existArrow--;
             }
-            if(anime.GetBool("Shooting")){
-                anime.SetBool("shooting",false);
-                Invoke("shooting",0.1f);
+        //检测是否是近战状态
+        }else if(anime.runtimeAnimatorController.name == "Sword_Player"){
+            if(Input.GetButtonDown("Attack") && !anime.GetCurrentAnimatorStateInfo(0).IsName("A1")){
+                anime.SetTrigger("A1");
+                //GetComponentInChildren<PlayerSword_sub>().enableDamage();
             }
-
         }
 
     }
 
-    void shooting(){
-        Instantiate(projection,GameObject.Find("Player").transform.position,GameObject.Find("Player").transform.rotation);
-        GameObject.Find("Player").GetComponent<PlayerAttack>().isAttack = false; 
-                
+    private void OnTriggerEnter2D(Collider2D other) {
+        if(other.CompareTag("Enemy")){
+            other.GetComponent<Enemy>().TakeDamage(swordDamage);
+        }    
     }
 }

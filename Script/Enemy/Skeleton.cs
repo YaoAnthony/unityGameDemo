@@ -10,19 +10,28 @@ using UnityEngine;
 
 **autor: Anthony, Andy
 
-**Create Time: Aug 30 2021
+**Create Time: Aug 31 2021
 
 **修改日志:
-    1.  Anthony Aug 30 2021
+    1.  Anthony Aug 31 2021
+    2.  Anthony Sep 01 2021
 
 
 *********************************************************************************/
 public class Skeleton : Enemy
 {
+    
+
+
+
     const float G = 9.8f;
     private Animator anime;         //获得动画
     private Rigidbody2D entity;     //获得刚体
     private bool isRunning;         //检测是否entity正在跑步
+    private float attackRange = 2f;
+
+
+
     void Start() {
         base.Start();
         anime = this.GetComponent<Animator>();
@@ -32,13 +41,14 @@ public class Skeleton : Enemy
 
     void Update(){
         base.Update();
+        findAndAttack();
+        Animations();
 
+        if(health <= 0){
+            Destroy(gameObject); 
+        }
+            
 
-        if(observePlayer())
-            findAndAttack();
-        else
-            Animation();
-        
         
     }
     /*
@@ -52,9 +62,10 @@ public class Skeleton : Enemy
     
         方案: 给定x坐标, 计算距离直接前往
     */
-    void Goto(Vector2 pos){
+    void GotoHorizontalPlayer(Vector2 pos){
         float x = pos.x - transform.position.x < 0 ? -1 : 1;
-        entity.velocity = new Vector2(x * speed, entity.velocity.y);          
+        entity.velocity = new Vector2(x * speed, entity.velocity.y); 
+                 
     }
 
    /*
@@ -97,14 +108,26 @@ public class Skeleton : Enemy
 
     //发现敌人，依靠算法搜索靠近敌人最短距离
     public void findAndAttack(){
-
+        Vector2 playerPos = GameObject.FindWithTag("Player").transform.position;
+        //检测玩家是否在搜索范围且在同一高度
+        //未来实现最短距离跟踪，可躲过障碍物攻击player
+        if(observePlayer() && Mathf.Abs(playerPos.y - transform.position.y) < 1){   
+            
+            if(Mathf.Abs(playerPos.x - transform.position.x) > attackRange){
+                GotoHorizontalPlayer(playerPos);
+            }else{
+                entity.velocity = new Vector2(0, entity.velocity.y);
+                //Attack();
+            }
+        }
     }
     /*
     --------------------------------------    动画调控    -------------------------------------------
     */
 
-    void Animation(){
-
+    void Animations(){
+        TurningAround();
+        anime.SetBool("Run",isRunning);
     }
 
     void TurningAround(){

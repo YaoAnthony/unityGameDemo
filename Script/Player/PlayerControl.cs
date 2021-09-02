@@ -15,6 +15,7 @@ using UnityEngine;
 
 **修改日志:
     1.  Anthony Aug 28 2021
+    2.  Anthony Aug 31 2021
 
 *********************************************************************************/
 public class PlayerControl : MonoBehaviour
@@ -22,10 +23,7 @@ public class PlayerControl : MonoBehaviour
     public float runningSpeed;      //用于输入奔跑速度
     public float jumpSpeed;         //用于输入跳跃速度
     public float doubleJumpSpeed;   //用于输入二段跳速度
-    public bool isAttack = false;   //用于和攻击交互
-
     public bool haveSword = false;  //是否获得了剑
-
     public bool haveRow = false;    //是否获得了弓
 
     //获得不同的动画效果组
@@ -65,10 +63,8 @@ public class PlayerControl : MonoBehaviour
     }
 
     void Run(){
-        if(!isAttack){
-            float x = Input.GetAxis("Horizontal");
-            entity.velocity = new Vector2(x * runningSpeed, entity.velocity.y);
-        }
+        float x = Input.GetAxis("Horizontal");
+        entity.velocity = new Vector2(x * runningSpeed, entity.velocity.y);
     }
 
     void Jump(){
@@ -96,7 +92,7 @@ public class PlayerControl : MonoBehaviour
 
     void EnvironmentCheck(){
         //检测对象是否在地面上
-        Debug.Log( myFeet.IsTouchingLayers(LayerMask.GetMask("Ground")));
+        //Debug.Log( myFeet.IsTouchingLayers(LayerMask.GetMask("Ground")));
         isGround = myFeet.IsTouchingLayers(LayerMask.GetMask("Ground"));
     }
     
